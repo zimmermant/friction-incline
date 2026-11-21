@@ -1,0 +1,116 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 6px 16px 6px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #111827;
+  background: #ffffff;
+}
+h1 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 600; }
+h2 { margin: 0 0 4px; font-size: 15px; line-height: 1.3; font-weight: 600; }
+
+/* ---- page layout -------------------------------------------------------
+   One column at every width, at most 740 px wide and centred: title, link note, the figure (scene and free-body
+   diagram), the controls (status, friction gauge right above the tension slider, the coefficient), then the worked
+   calculation. At 1280 x 720 everything but the calculation fits in the first 650 px; only the calculation scrolls. */
+.page { max-width: 740px; margin: 0 auto; }
+.fig-col { max-width: 740px; margin: 0 auto; }
+#fig { display: block; width: 100%; height: auto; }
+.side { max-width: 740px; margin: 4px auto 0; display: grid; grid-template-columns: 1fr; gap: 6px; }
+.panel { border: 1px solid #d5dbe3; border-radius: 8px; padding: 6px 12px; background: #f9fafb; }
+
+/* ---- the "From the link" note: one small unboxed line under the title ---- */
+#from-link { margin: 0 0 2px; font-size: 13px; line-height: 1.3; color: #744210; }
+#from-link[hidden] { display: none; }
+
+/* ---- status pill: colour AND words ---- */
+.status-line { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.status { display: inline-block; padding: 1px 10px; border-radius: 12px; font-size: 14px; }
+.status.rest { background: #e7f4ea; color: #1e6b2e; }
+.status.slip { background: #fbe6e0; color: #a2321a; }
+.status.wall { background: #fdf3d6; color: #7a5a05; }
+
+/* ---- the friction gauge: same column and scale as the tension slider. The inset is the slider thumb's half-width
+   (22 px thumb), so the bar's end sits exactly above the thumb's centre for the same value. ---- */
+.gauge { position: relative; height: 38px; margin: 0 11px; }
+.gauge-track { position: absolute; left: 0; right: 0; top: 15px; height: 22px; border-radius: 11px; background: #eceff3; border: 1px solid #cfd5dd; }
+.gauge-bar { position: absolute; left: 0; top: 19px; height: 14px; border-radius: 11px; background: linear-gradient(#f08a66, #c13d17); transition: width .08s; }
+.gauge-bar.kinetic { background: linear-gradient(#b98af2, #6a33ad); }
+.gauge-band { position: absolute; top: 15px; height: 22px; background: rgba(42,143,60,.16); border-left: 2px solid #2a8f3c; border-right: 2px solid #2a8f3c; }
+.gauge-wall { position: absolute; top: 19px; height: 14px; border-radius: 7px; background: repeating-linear-gradient(45deg, #f2c14e 0 5px, #d9a52b 5px 10px); }
+.legend { font-size: 12px; line-height: 1.15; color: #5d6675; margin: 0 11px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chk { margin-left: 14px; font-weight: 400; cursor: pointer; padding: 1px 6px; border-radius: 5px; }
+.chk:hover { background: #eef3fb; color: #1450a0; }
+.chk:active { background: #dfe9f8; }
+.chk:focus-within { outline: 2px solid #2b6cb0; outline-offset: 1px; }
+.gauge-max { position: absolute; top: 10px; width: 3px; height: 31px; margin-left: -1.5px; background: #1d2330; border-radius: 1px; }
+.gauge-max-label { position: absolute; top: -5px; transform: translateX(-50%); white-space: nowrap; font-size: 13px; padding: 0 6px; border-radius: 9px; transition: background .1s, color .1s; }
+.gauge-max-label.on { background: #1d2330; color: #ffffff; }
+
+/* ---- sliders ----------------------------------------------------------- */
+.ctl { margin-bottom: 1px; }
+.ctl-head { font-size: 15px; line-height: 1.3; }
+.ctl-head label { cursor: pointer; }
+.readout { font-variant-numeric: tabular-nums; display: inline-block; min-width: 2.6em; text-align: right; }
+.zs { position: relative; padding-top: 2px; }
+/* The marked zero: a tick at the centre of the scale, and a label that lights up while the value is 0. */
+.zt { position: absolute; left: 50%; top: 2px; width: 2px; height: 26px; margin-left: -1px; background: #2f855a; border-radius: 1px; pointer-events: none; }
+.zs input[type=range] {
+  position: relative; z-index: 1; display: block; width: 100%; height: 26px; margin: 0; padding: 0;
+  background: transparent; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.zs input[type=range]:focus { outline: none; }
+.zs input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: #a0aec0; }
+.zs input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: #a0aec0; }
+.zs input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; box-sizing: border-box; width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+  background: #ffffff; border: 3px solid #2d3748; box-shadow: 0 1px 3px #0004; transition: transform .08s, background .08s, border-color .08s;
+}
+.zs input[type=range]::-moz-range-thumb {
+  box-sizing: border-box; width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 3px solid #2d3748; box-shadow: 0 1px 3px #0004;
+  transition: transform .08s, background .08s, border-color .08s;
+}
+.zs input[type=range]:hover::-webkit-slider-runnable-track { background: #718096; }
+.zs input[type=range]:hover::-moz-range-track { background: #718096; }
+.zs input[type=range]:hover::-webkit-slider-thumb { background: #ebf8ff; border-color: #2b6cb0; transform: scale(1.12); }
+.zs input[type=range]:hover::-moz-range-thumb { background: #ebf8ff; border-color: #2b6cb0; transform: scale(1.12); }
+.zs input[type=range]:active::-webkit-slider-thumb { background: #2b6cb0; border-color: #2c5282; transform: scale(1.2); }
+.zs input[type=range]:active::-moz-range-thumb { background: #2b6cb0; border-color: #2c5282; transform: scale(1.2); }
+.zs input[type=range]:focus-visible::-webkit-slider-thumb { border-color: #2b6cb0; box-shadow: 0 0 0 4px #2b6cb066; }
+.zs input[type=range]:focus-visible::-moz-range-thumb { border-color: #2b6cb0; box-shadow: 0 0 0 4px #2b6cb066; }
+.zl { position: relative; display: flex; justify-content: space-between; margin-top: 1px; font-size: 13px; line-height: 1.3; opacity: .9; }
+/* The marked zero (a snap field) and any other marked value (a `mark` field): a label at its place that lights up while the slider sits on it. */
+.zl .zero-label, .zl .mark-label {
+  position: absolute; left: 50%; transform: translateX(-50%); padding: 0 8px; font-weight: 700; color: #2f855a;
+  border-radius: 10px; transition: background .1s, color .1s;
+}
+.zl .zero-label.on, .zl .mark-label.on { background: #2f855a; color: #ffffff; }
+
+/* ---- the button ------------------------------------------------------- */
+.btn {
+  display: block; width: 100%; margin-top: 4px; padding: 4px 8px; font: inherit; font-size: 14px; line-height: 1.3; color: #111827; text-align: center;
+  background: #edf2f7; border: 2px solid #a0aec0; border-radius: 6px; cursor: pointer;
+}
+.btn:hover { background: #e2e8f0; border-color: #4a5568; }
+.btn:active { background: #cbd5e0; transform: translateY(1px); }
+.btn:focus-visible { outline: 3px solid #2b6cb0; outline-offset: 2px; }
+
+/* ---- the calculation ------------------------------------------------ */
+.calc-panel { padding-top: 4px; padding-bottom: 4px; }
+#calc { font-size: 13px; line-height: 1.25; padding-bottom: 3px; }   /* room for the last line's subscript */
+#calc .cl { margin-bottom: 2px; }
+/* A subscript is browser-default 83% of its parent (10.8 px at 13 px): keep it at the 12 px floor. */
+#calc sub, #controls sub { font-size: 12px; line-height: 0; }
+#calc .cl:last-child { margin-bottom: 0; }
+#calc .cl[class*="sym-"] { color: #4a5568; }      /* every symbolic line: the panel's line keys start with sym- */
+#calc .note { font-style: italic; color: #4a5568; }
+#calc .calc-head { margin: 0 0 3px; font-size: 14px; font-weight: 600; }
+
+/* A link below the calculation, outside #calc (which is rewritten). */
+.more { display: block; width: fit-content; margin: 2px 0 0; padding: 0 2px; font-size: 13px; line-height: 1.3; color: #2b6cb0; text-decoration: underline; border-radius: 3px; }
+.more:hover { color: #1a365d; background: #ebf8ff; }
+.more:active { color: #1a365d; background: #bee3f8; }
+.more:focus-visible { outline: 3px solid #2b6cb0; outline-offset: 1px; }

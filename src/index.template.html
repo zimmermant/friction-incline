@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block on an incline, pulled up the slope</title>
+<!--INLINE_CSS-->
+</head>
+<body>
+<main class="page">
+<h1>Block on an incline, pulled up the slope</h1>
+<p id="from-link" hidden></p>
+<div class="fig-col">
+<svg id="fig" viewBox="0 0 740 300" role="img" aria-label="A steel block B on a wooden incline, pulled up the slope by a string, between a low stop D at the bottom and a low stop C at the top, and the free-body diagram of B drawn as a point with its tension, friction, normal, weight and stop forces"></svg>
+</div>
+<div class="side">
+<section id="controls" class="panel" aria-label="Friction controls">
+  <div class="status-line">Status: <span id="status" class="status rest" aria-live="polite">At rest</span>
+    <label class="chk"><input type="checkbox" id="comps"> Show components of W</label></div>
+  <div class="ctl gauge-ctl">
+    <div class="ctl-head"><b>Friction force</b> f = <b id="f-readout" class="readout">8.6&nbsp;N up the slope</b></div>
+    <div class="zs">
+      <div id="gauge" class="gauge" aria-hidden="true">
+        <div class="gauge-track"></div>
+        <div id="gauge-band" class="gauge-band" style="left:0%;width:70.4255%"></div>
+        <div id="gauge-bar" class="gauge-bar" style="left:25%;width:8.552%"></div>
+        <div id="gauge-wall" class="gauge-wall" style="left:25%;width:0%"></div>
+        <div id="gauge-mark" class="gauge-max" style="left:33.552%"></div>
+        <span id="gauge-mark-label" class="gauge-max-label" style="left:33.552%">W sin θ = 33.6&nbsp;N</span>
+      </div>
+      <div class="legend">green band: tensions that static friction can hold (W sin θ ± μN)</div>
+    </div>
+  </div>
+  <div class="ctl">
+    <div class="ctl-head"><label for="tension-slider"><b>Tension</b></label> T = <b id="tension-readout" class="readout">25.0</b>&nbsp;N</div>
+    <div class="zs">
+      <input type="range" id="tension-slider" min="0" max="100" step="0.5" value="25">
+      <div class="zl"><span>0.0&nbsp;N</span><span>100.0&nbsp;N</span></div>
+    </div>
+  </div>
+  <div class="two">
+  <div class="ctl">
+    <div class="ctl-head"><label for="theta-slider"><b>Incline angle</b></label> θ = <b id="theta-readout" class="readout">20</b>°</div>
+    <div class="zs">
+      <input type="range" id="theta-slider" min="0" max="40" step="1" value="20">
+      <div class="zl"><span>0°</span><span>40°</span></div>
+    </div>
+  </div>
+  <div class="ctl">
+    <div class="ctl-head"><label for="mu-slider"><b>Coefficient of friction</b></label> μ = <b id="mu-readout" class="readout">0.40</b></div>
+    <div class="zs">
+      <input type="range" id="mu-slider" min="0.1" max="0.8" step="0.01" value="0.4">
+      <div class="zl"><span>μ = 0.10</span><span>μ = 0.80</span></div>
+    </div>
+  </div>
+  </div>
+  <button type="button" id="reset" class="btn">Reset</button>
+</section>
+<section class="panel calc-panel">
+  <div id="calc" aria-live="polite"></div>
+  <a id="example-link" class="more" href="?t=60&amp;theta=20&amp;mu=0.40">Example link: T = 60.0&nbsp;N, θ = 20°, μ = 0.40 (friction points down the slope)</a>
+</section>
+</div>
+</main>
+<!--INLINE_JS-->
+</body>
+</html>
